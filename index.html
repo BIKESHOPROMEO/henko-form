@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8">
     <script>
-      // ƒNƒGƒŠ•¶Žš—ñ‚ðŽæ“¾‚µ‚Ä edit.html ‚Éˆø‚«Œp‚®
       const query = window.location.search;
       window.location.href = "edit.html" + query;
     </script>
@@ -12,7 +11,7 @@
   <body>
     <p>Redirecting to <a id="link" href="#">edit.html</a>...</p>
     <script>
-      document.getElementById("link").href = "edit.html" + query;
+      document.getElementById("link").href = "edit.html" + window.location.search;
     </script>
   </body>
 </html>

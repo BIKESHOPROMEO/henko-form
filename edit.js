@@ -29,7 +29,7 @@ async function fetchReservationData() {
 }
 
 function formatTime(timeStr) {
-  const t = new Date(timeStr);
+  const t = new Date(`1970-01-01T${timeStr}:00`);
   return `${t.getHours().toString().padStart(2, "0")}:${t.getMinutes().toString().padStart(2, "0")}`;
 }
 
