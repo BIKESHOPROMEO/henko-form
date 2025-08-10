@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="0; URL=edit.html">
+    <meta charset="UTF-8">
+    <script>
+      // ƒNƒGƒŠ•¶Žš—ñ‚ðŽæ“¾‚µ‚Ä edit.html ‚Éˆø‚«Œp‚®
+      const query = window.location.search;
+      window.location.href = "edit.html" + query;
+    </script>
+    <title>Redirecting...</title>
   </head>
   <body>
-    <p>Redirecting to <a href="edit.html">edit.html</a>...</p>
+    <p>Redirecting to <a id="link" href="#">edit.html</a>...</p>
+    <script>
+      document.getElementById("link").href = "edit.html" + query;
+    </script>
   </body>
 </html>
