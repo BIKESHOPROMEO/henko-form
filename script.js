@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+const loadingOverlay = document.getElementById("loadingOverlay");
+loadingOverlay.style.display = "block"; // ← fetch前に表示
+
   const params = new URLSearchParams(window.location.search);
   const selectedDate = params.get("date");
   const selectedTime = params.get("time");
@@ -21,10 +24,6 @@ function formatJapaneseDate(dateStr, rawTimeStr) {
   const weekday = weekdays[date.getDay()];
   return `${month}/${day}（${weekday}） ${timeStr}`;
 }
-
-const loadingOverlay = document.getElementById("loadingOverlay");
-loadingOverlay.style.display = "block"; // ← fetch前に表示
-
 
 if (id) {
   fetch(`https://script.google.com/macros/s/AKfycbyDMFIYDqB_oE6Dybo9wH1LpePIMPwjjcPjmcAuEps32T344pTdETiyjlKA6Sb5YEDaEQ/exec?id=${id}`)
