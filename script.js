@@ -40,6 +40,12 @@ if (id) {
         document.querySelector('input[name="date"]').value = data.date || "";
         document.querySelector('input[name="time"]').value = data.time || "";
 
+	  // hiddenフィールドに値をセット
+	document.querySelector('input[name="id"]').value = id || "";
+	document.querySelector('input[name="date"]').value = data.date || "";
+  	document.querySelector('input[name="time"]').value = data.time || "";
+
+
 	// 元の予約日時を表示
 	const originalDisplayText = formatJapaneseDate(data.date, data.time);
 	document.getElementById("originalDateTime").textContent = originalDisplayText;
@@ -70,10 +76,7 @@ if (id) {
 
   document.getElementById("selectedDateTime").style.color = "#007BFF";
 
-  // hiddenフィールドに値をセット
-  document.querySelector('input[name="date"]').value = selectedDate || "";
-  document.querySelector('input[name="time"]').value = selectedTime || "";
-  document.querySelector('input[name="id"]').value = id || "";
+  
 
   // 日時変更ボタンの動作
   document.getElementById("changeDateBtn").addEventListener("click", () => {
