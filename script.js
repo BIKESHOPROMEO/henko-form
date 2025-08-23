@@ -26,7 +26,7 @@ function formatJapaneseDate(dateStr, rawTimeStr) {
 }
 
 if (id) {
-  fetch(`https://script.google.com/macros/s/AKfycbyDMFIYDqB_oE6Dybo9wH1LpePIMPwjjcPjmcAuEps32T344pTdETiyjlKA6Sb5YEDaEQ/exec?id=${id}`)
+  fetch(`/api/henko-form?id=${id}`)
     .then(res => res.json())
     .then(data => {
   if (data && data.id) {
