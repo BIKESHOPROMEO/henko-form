@@ -47,7 +47,7 @@ document.getElementById("submitBtn").addEventListener("click", async function ()
   data.selectedDateTime = `${data.date || ""} ${data.time || ""}`;
 
   try {
-    const response = await fetch("/api/yoyaku-form", {
+    const response = await fetch("/api/henko-form", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
