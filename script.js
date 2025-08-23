@@ -22,6 +22,10 @@ function formatJapaneseDate(dateStr, rawTimeStr) {
   return `${month}/${day}（${weekday}） ${timeStr}`;
 }
 
+const loadingOverlay = document.getElementById("loadingOverlay");
+loadingOverlay.style.display = "block"; // ← fetch前に表示
+
+
 if (id) {
   fetch(`https://script.google.com/macros/s/AKfycbyDMFIYDqB_oE6Dybo9wH1LpePIMPwjjcPjmcAuEps32T344pTdETiyjlKA6Sb5YEDaEQ/exec?id=${id}`)
     .then(res => res.json())
@@ -46,6 +50,9 @@ if (id) {
     .catch(err => {
       console.error("予約情報取得エラー:", err);
       alert("予約情報の取得に失敗しました");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none"; // ? fetch完了後にくるくるを消す
     });
 }
 
