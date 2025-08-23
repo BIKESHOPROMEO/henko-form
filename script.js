@@ -40,9 +40,21 @@ if (id) {
         document.querySelector('input[name="date"]').value = data.date || "";
         document.querySelector('input[name="time"]').value = data.time || "";
 
-        // 表示用テキスト更新
-        const displayText = formatJapaneseDate(data.date, data.time);
-        document.getElementById("selectedDateTime").textContent = displayText;
+	// 元の予約日時を表示
+	const originalDisplayText = formatJapaneseDate(data.date, data.time);
+	document.getElementById("originalDateTime").textContent = originalDisplayText;
+
+	// 新しい日時がある場合は表示＆セット
+	if (selectedDate && selectedTime) {
+	  const newDisplayText = formatJapaneseDate(selectedDate, selectedTime);
+	  document.getElementById("selectedDateTime").textContent = newDisplayText;
+
+	  document.querySelector('input[name="date"]').value = selectedDate;
+	  document.querySelector('input[name="time"]').value = selectedTime;
+	} else {
+  	// 新しい日時がない場合は元の日時を表示
+  	document.getElementById("selectedDateTime").textContent = originalDisplayText;
+	}
       } else {
         alert("予約情報の取得に失敗しました");
       }
@@ -108,4 +120,3 @@ if (id) {
       document.getElementById("sendingDialog").style.display = "none";
     }
   });
-});
