@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const day = date.getDate();
     const weekday = weekdays[date.getDay()];
     return `${month}/${day}（${weekday}） ${timeStr}`;
-  }
+}
 
 if (id) {
   fetch(`https://script.google.com/macros/s/AKfycbyDMFIYDqB_oE6Dybo9wH1LpePIMPwjjcPjmcAuEps32T344pTdETiyjlKA6Sb5YEDaEQ/exec?id=${id}`)
