@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     data.selectedDateTime = `${data.date || ""} ${data.time || ""}`;
 
     try {
-      const response = await fetch("/api/yoyaku-form", {
+      const response = await fetch("/api/henko-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
