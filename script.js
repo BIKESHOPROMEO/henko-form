@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 日時変更ボタンの動作
   document.getElementById("changeDateBtn").addEventListener("click", () => {
     if (id) {
-      window.location.href = `https://henko-form.vercel.app/?id=${id}`;
+      window.location.href = `https://bikeshopromeo.github.io/reservation-edit/?id=${id}`;
     } else {
       alert("予約IDが取得できませんでした。");
     }
