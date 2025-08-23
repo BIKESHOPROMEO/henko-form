@@ -14,11 +14,33 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${month}/${day}（${weekday}） ${timeStr}`;
   }
 
-  const displayText = (selectedDate && selectedTime)
-    ? formatJapaneseDate(selectedDate, selectedTime)
-    : "未選択";
+if (id) {
+  fetch(`https://script.google.com/macros/s/AKfycbyDMFIYDqB_oE6Dybo9wH1LpePIMPwjjcPjmcAuEps32T344pTdETiyjlKA6Sb5YEDaEQ/exec?id=${id}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.id) {
+        document.querySelector('input[name="name"]').value = data.name || "";
+        document.querySelector('input[name="phone"]').value = data.phone || "";
+        document.querySelector('input[name="email"]').value = data.email || "";
+        document.querySelector('input[name="carModel"]').value = data.carModel || "";
+        document.querySelector('select[name="workType"]').value = data.workType || "";
+        document.querySelector('textarea[name="note"]').value = data.note || "";
+        document.querySelector('input[name="date"]').value = data.date || "";
+        document.querySelector('input[name="time"]').value = data.time || "";
 
-  document.getElementById("selectedDateTime").textContent = displayText;
+        // 表示用テキスト更新
+        const displayText = formatJapaneseDate(data.date, data.time);
+        document.getElementById("selectedDateTime").textContent = displayText;
+      } else {
+        alert("予約情報の取得に失敗しました");
+      }
+    })
+    .catch(err => {
+      console.error("予約情報取得エラー:", err);
+      alert("予約情報の取得に失敗しました");
+    });
+}
+
   document.getElementById("selectedDateTime").style.color = "#007BFF";
 
   // hiddenフィールドに値をセット
