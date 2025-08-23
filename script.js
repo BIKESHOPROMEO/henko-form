@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 日付表示整形
   function formatJapaneseDate(dateStr, timeStr) {
-    const date = new Date(`${dateStr}T${timeStr}`);
+    const date = new Date(dateStr);
     const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
     const month = date.getMonth() + 1;
     const day = date.getDate();
