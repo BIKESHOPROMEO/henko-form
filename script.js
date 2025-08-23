@@ -5,13 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const id = params.get("id");
 
   // 日付表示整形
-  function formatJapaneseDate(dateStr, timeStr) {
-    const date = new Date(dateStr);
-    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const weekday = weekdays[date.getDay()];
-    return `${month}/${day}（${weekday}） ${timeStr}`;
+function formatJapaneseDate(dateStr, rawTimeStr) {
+  let timeStr = rawTimeStr;
+
+  // もし timeStr が Date型っぽかったら、文字列に変換
+  if (typeof rawTimeStr === "string" && rawTimeStr.includes("T")) {
+    const timeObj = new Date(rawTimeStr);
+    timeStr = timeObj.getHours().toString().padStart(2, "0") + ":" + timeObj.getMinutes().toString().padStart(2, "0");
+  }
+
+  const date = new Date(dateStr);
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const weekday = weekdays[date.getDay()];
+  return `${month}/${day}（${weekday}） ${timeStr}`;
 }
 
 if (id) {
