@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 const loadingOverlay = document.getElementById("loadingOverlay");
-loadingOverlay.style.display = "block"; // ← fetch前に表示
+//loadingOverlay.style.display = "block"; // ← fetch前に表示
 
   const params = new URLSearchParams(window.location.search);
   const selectedDate = params.get("date");
