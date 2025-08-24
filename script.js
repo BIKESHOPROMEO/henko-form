@@ -120,3 +120,4 @@ if (id) {
       document.getElementById("sendingDialog").style.display = "none";
     }
   });
+ });
