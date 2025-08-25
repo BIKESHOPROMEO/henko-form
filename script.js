@@ -84,6 +84,50 @@ if (id) {
     }
   });
 
+	document.getElementById("cancelBtn").addEventListener("click", async function () {
+  if (!id) {
+    alert("予約IDが取得できませんでした。");
+    return;
+  }
+
+  const confirmCancel = confirm("本当に予約をキャンセルしますか？");
+  if (!confirmCancel) return;
+
+  this.disabled = true;
+  document.getElementById("sendingDialog").style.display = "block";
+
+  const form = document.getElementById("reservationForm");
+  const formData = new FormData(form);
+  const data = {};
+
+  for (const [key, value] of formData.entries()) {
+    data[key] = value;
+  }
+
+  data.action = "cancel";
+
+  try {
+    const response = await fetch("/api/henko-form", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    console.log("キャンセル成功:", result);
+    alert(result.message || "予約をキャンセルしました！");
+    window.location.href = "https://bikeshopromeo.github.io/reservation-cancelled"; // ← 任意の完了画面へ
+  } catch (err) {
+    console.error("キャンセルエラー:", err);
+    alert("キャンセル処理中にエラーが発生しました：" + err.message);
+    this.disabled = false;
+  } finally {
+    document.getElementById("sendingDialog").style.display = "none";
+  }
+});
+
   // 送信処理
   document.getElementById("submitBtn").addEventListener("click", async function () {
     this.disabled = true;
