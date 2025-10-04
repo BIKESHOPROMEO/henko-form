@@ -44,10 +44,13 @@ if (id) {
         document.querySelector('input[name="id"]').value = id || "";
 
         let originalDisplayText = "";
-        if (originalDate && originalTime) {
-        originalDisplayText = formatJapaneseDate(originalDate, originalTime);
-        document.getElementById("originalDateTime").textContent = originalDisplayText;
-      }
+          if (originalDate && originalTime) {
+            originalDisplayText = formatJapaneseDate(originalDate, originalTime);
+          } else if (data.date && data.time) {
+            originalDisplayText = formatJapaneseDate(data.date, data.time);
+          }
+        
+        document.getElementById("originalDateTime").textContent = originalDisplayText;      
 
         if (selectedDate && selectedTime) {
           const newDisplayText = formatJapaneseDate(selectedDate, selectedTime);
@@ -73,12 +76,6 @@ if (id) {
       loadingOverlay.style.display = "none";
     });
 }
-
-
-  document.getElementById("selectedDateTime").style.color = "#007BFF";
-
-  
-
   // 日時変更ボタンの動作
   document.getElementById("changeDateBtn").addEventListener("click", () => {
   if (id) {
