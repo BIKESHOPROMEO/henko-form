@@ -26,7 +26,7 @@ function formatJapaneseDate(dateStr, rawTimeStr) {
 }
 
 if (id) {
-  fetch(`/api/henko-form?id=${id}&action=getReservation`)
+  fetch(`/api/henko-form`)
     .then(res => res.json())
     .then(data => {
   if (data && data.id) {
