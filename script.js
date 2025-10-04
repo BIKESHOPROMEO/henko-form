@@ -6,8 +6,8 @@ loadingOverlay.style.display = "block"; // ← fetch前に表示
   let selectedDate = params.get("date");
   let selectedTime = params.get("time");
   const id = params.get("id");
-  const originalDate = params.get("originalDate");
-  const originalTime = params.get("originalTime");
+  let originalDate = params.get("originalDate");
+  let originalTime = params.get("originalTime");
 
   // 日付表示整形
 function formatJapaneseDate(dateStr, rawTimeStr) {
@@ -47,12 +47,13 @@ if (id) {
         document.querySelector('input[name="id"]').value = id || "";
 
         let originalDisplayText = "";
+          if (!originalDate && data.date) originalDate = data.date;
+          if (!originalTime && data.time) originalTime = data.time;
+
           if (originalDate && originalTime) {
             originalDisplayText = formatJapaneseDate(originalDate, originalTime);
-          } else if (data.date && data.time) {
-            originalDisplayText = formatJapaneseDate(data.date, data.time);
           }
-        
+                  
         document.getElementById("originalDateTime").textContent = originalDisplayText;      
 
         if (selectedDate && selectedTime) {
