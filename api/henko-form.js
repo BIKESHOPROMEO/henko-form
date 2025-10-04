@@ -2,18 +2,18 @@ export default async function handler(req, res) {
   const GAS_BASE_URL = "https://script.google.com/macros/s/AKfycbwvqxdEp4sWhAACzZRlPe9LzNdNxg2lY5XvIh_uRcfWJHMTnKlFaetKAdwSPdiGzTtwDg/exec";
 
   if (req.method === "GET") {
-    const { id } = req.query;
-    const GAS_URL = `${GAS_BASE_URL}?id=${id}`;
+  const { id } = req.query;
+  const GAS_URL = `${GAS_BASE_URL}?id=${id}&action=getReservation`;
 
-    try {
-      const response = await fetch(`${GAS_URL}?id=${id}&action=getReservation`);
-      const text = await response.text();
-      const result = JSON.parse(text);
-      return res.status(200).json(result);
-    } catch (err) {
-      return res.status(500).json({ message: "取得エラー", error: err.message });
-    }
+  try {
+    const response = await fetch(GAS_URL);
+    const text = await response.text();
+    const result = JSON.parse(text);
+    return res.status(200).json(result);
+  } catch (err) {
+    return res.status(500).json({ message: "取得エラー", error: err.message });
   }
+}
 
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
