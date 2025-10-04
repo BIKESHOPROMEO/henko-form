@@ -2,12 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
 const loadingOverlay = document.getElementById("loadingOverlay");
 loadingOverlay.style.display = "block"; // ← fetch前に表示
 
-  const params = new URLSearchParams(window.location.search);
-  const originalDate = params.get("originalDate");
-  const originalTime = params.get("originalTime");
+  const params = new URLSearchParams(window.location.search);  
   const selectedDate = params.get("date");
   const selectedTime = params.get("time");
   const id = params.get("id");
+  const originalDate = params.get("originalDate");
+  const originalTime = params.get("originalTime");
 
   // 日付表示整形
 function formatJapaneseDate(dateStr, rawTimeStr) {
@@ -84,8 +84,8 @@ if (id) {
   if (id) {
     const url = new URL("https://henko-calendar.vercel.app/");
     url.searchParams.set("id", id); // ← 予約ID
-    url.searchParams.set("date", selectedDate); // ← 元の予約日
-    url.searchParams.set("time", selectedTime); // ← 元の予約時間
+    url.searchParams.set("originalDate", selectedDate); // ← 元の予約日
+    url.searchParams.set("originalTime", selectedTime); // ← 元の予約時間
     window.location.href = url.toString();
   } else {
     alert("予約IDが取得できませんでした。");
