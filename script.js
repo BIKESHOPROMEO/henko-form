@@ -3,6 +3,8 @@ const loadingOverlay = document.getElementById("loadingOverlay");
 loadingOverlay.style.display = "block"; // ← fetch前に表示
 
   const params = new URLSearchParams(window.location.search);
+  const originalDate = params.get("originalDate");
+  const originalTime = params.get("originalTime");
   const selectedDate = params.get("date");
   const selectedTime = params.get("time");
   const id = params.get("id");
@@ -38,12 +40,14 @@ if (id) {
         document.querySelector('select[name="workType"]').value = data.workType || "";
         document.querySelector('textarea[name="note"]').value = data.note || "";
 
-        // 元の日時表示
-        const originalDisplayText = formatJapaneseDate(data.date, data.time);
-        document.getElementById("originalDateTime").textContent = originalDisplayText;
-
         // hiddenフィールド（IDは常にセット）
         document.querySelector('input[name="id"]').value = id || "";
+
+        let originalDisplayText = "";
+        if (originalDate && originalTime) {
+        originalDisplayText = formatJapaneseDate(originalDate, originalTime);
+        document.getElementById("originalDateTime").textContent = originalDisplayText;
+      }
 
         if (selectedDate && selectedTime) {
           const newDisplayText = formatJapaneseDate(selectedDate, selectedTime);
