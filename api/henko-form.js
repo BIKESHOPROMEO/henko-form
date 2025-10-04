@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
     try {
       const response = await fetch(`${GAS_URL}?id=${id}&action=getReservation`);
-      const text = await gasRes.text();
+      const text = await response.text();
       const result = JSON.parse(text);
       return res.status(200).json(result);
     } catch (err) {
