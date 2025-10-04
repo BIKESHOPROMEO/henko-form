@@ -32,6 +32,9 @@ if (id) {
     .then(res => res.json())
     .then(data => {
   if (data && data.id) {
+        const selectedDate = params.get("date") || data.date;
+        const selectedTime = params.get("time") || data.time;
+
     // フォームに反映
         document.querySelector('input[name="name"]').value = data.name || "";
         document.querySelector('input[name="phone"]').value = data.phone || "";
