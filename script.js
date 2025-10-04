@@ -3,8 +3,8 @@ const loadingOverlay = document.getElementById("loadingOverlay");
 loadingOverlay.style.display = "block"; // ← fetch前に表示
 
   const params = new URLSearchParams(window.location.search);  
-  const selectedDate = params.get("date");
-  const selectedTime = params.get("time");
+  let selectedDate = params.get("date");
+  let selectedTime = params.get("time");
   const id = params.get("id");
   const originalDate = params.get("originalDate");
   const originalTime = params.get("originalTime");
@@ -32,8 +32,8 @@ if (id) {
     .then(res => res.json())
     .then(data => {
   if (data && data.id) {
-        const selectedDate = params.get("date") || data.date;
-        const selectedTime = params.get("time") || data.time;
+        selectedDate = selectedDate || data.date;
+        selectedTime = selectedTime || data.time;
 
     // フォームに反映
         document.querySelector('input[name="name"]').value = data.name || "";
