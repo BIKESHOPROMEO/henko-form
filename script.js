@@ -77,12 +77,16 @@ if (id) {
 
   // 日時変更ボタンの動作
   document.getElementById("changeDateBtn").addEventListener("click", () => {
-    if (id) {
-      window.location.href = `https://bikeshopromeo.github.io/reservation-edit/?id=${id}`;
-    } else {
-      alert("予約IDが取得できませんでした。");
-    }
-  });
+  if (id) {
+    const url = new URL("https://henko-calendar.vercel.app/");
+    url.searchParams.set("id", id); // ← 予約ID
+    url.searchParams.set("date", selectedDate); // ← 元の予約日
+    url.searchParams.set("time", selectedTime); // ← 元の予約時間
+    window.location.href = url.toString();
+  } else {
+    alert("予約IDが取得できませんでした。");
+  }
+});
 
 	document.getElementById("cancelBtn").addEventListener("click", async function () {
   if (!id) {
