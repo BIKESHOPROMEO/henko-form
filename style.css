@@ -50,4 +50,5 @@ button:hover {
 .required-mark {
   color: red;
   font-weight: bold;
+  font-size: 0.8em;
 }
