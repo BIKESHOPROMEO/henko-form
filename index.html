@@ -3,35 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>予約フォーム</title>
+  <title>予約変更フォーム</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h2>予約者様情報入力フォーム</h2>
+  <h2>予約者様情報変更フォーム</h2>
 
-  <p>◎選択された日時：<span id="selectedDateTime" class="datetime-display">未選択</span></p>
-  <p>◎ご予約者名：<span id="nameWithHonorific">未入力</span></p>
+  <p>
+  ◎元の予約日時：<span id="originalDateTime" class="datetime-display">未取得</span><br>
+  ◎新しい予約日時：<span id="selectedDateTime" class="datetime-display">未選択</span>
+  <button type="button" id="changeDateBtn" style="margin-left:10px;">日時変更</button>
+  <button type="button" id="cancelBtn" style="margin-left:20px; color:#fff; background-color:#d9534f; border:none; padding:6px 12px; border-radius:4px;">キャンセル</button>
+</p>
+
 
   <form id="reservationForm">
 	<input type="hidden" name="date" value="">
 	<input type="hidden" name="time" value="">
+	<input type="hidden" name="id" value="">
 
     <label>お名前（フルネームでご記入ください。）<br> <span class="required-mark">※入力必須</span> <br>
       <input type="text" name="name" required>
     </label>
 
     <label>電話番号（ハイフン無しでご記入ください。）<br> <span class="required-mark">※入力必須</span> <br>
-  <input
-    type="text"
-    name="phone"
-    inputmode="numeric"
-    pattern="\d{10,11}"
-    maxlength="11"
-    required
-    placeholder="09012345678">
-</label>
-
+      <input
+ 	 type="tel"
+  	name="phone"
+  	placeholder="09012345678"
+  	pattern="0\d{9,10}"
+  	maxlength="11"
+  	required>
+    </label>
 
     <label>メールアドレス<br> <span class="required-mark">※入力必須</span> <br>
       <input type="email" name="email" required>
@@ -41,7 +45,7 @@
       <input type="text" name="carModel" required>
     </label>
 
-    <label>ご希望作業内容<br> <span class="required-mark">※選択必須</span> <br> タイヤ交換や部品交換等をご希望の場合は、事前に店舗へ在庫確認をお願いします。 <br>
+    <label>ご希望作業内容<br> <span class="required-mark">※選択必須</span> <br>
       <select name="workType" required>
         <option value="">選択してください</option>
         <option value="1ヶ月点検">1ヶ月点検</option>
@@ -60,27 +64,27 @@
     <button type="button" id="submitBtn">予約を送信</button>
   </form>
 
+<!-- 読み込み中オーバーレイ -->
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+background:rgba(255,255,255,0.8); z-index:998; text-align:center; padding-top:30vh; font-size:18px; color:#333;">
+  <div>読み込み中です…</div>
+  <img src="https://i.gifer.com/ZZ5H.gif" alt="読み込み中" width="40" height="40">
+</div>
+
 <!-- 送信中ダイアログ -->
 <div id="sendingDialog" style="display:none; position:fixed; top:40%; left:50%; transform:translate(-50%, -50%);
 background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:999; text-align:center;">
   <div style="font-size:16px; margin-bottom:10px;">送信中です…しばらくお待ちください</div>
   <img src="https://i.gifer.com/ZZ5H.gif" alt="読み込み中" width="40" height="40">
 </div>
-
+<!-- 閉じる案内ダイアログ -->
+<div id="closeDialog" style="display:none; position:fixed; top:40%; left:50%; transform:translate(-50%, -50%);
+background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:999; text-align:center;">
+  <div style="font-size:16px; margin-bottom:10px;">画面は手動で閉じてください。<br>ご利用ありがとうございました。</div>
+  <button id="closeDialogBtn" style="margin-top:10px;">閉じる</button>
+</div>
 
   <script src="script.js" defer></script>
-
-<!-- 完了ダイアログ -->
-<div id="completeDialog" style="display:none; position:fixed; top:40%; left:50%; transform:translate(-50%, -50%);
-background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:999; text-align:center;">
-  <div style="font-size:16px; margin-bottom:10px;">
-    予約が完了しました。<br>予約変更やキャンセルは予約確認メールの<br>URLより変更、キャンセルが可能です。
-  </div>
-  <button style="padding:8px 16px; background:#007BFF; color:#fff; border:none; border-radius:4px;"
-    onclick="alert('画面は手動で閉じてください。ご利用ありがとうございました！')">
-    閉じる案内
-  </button>
-</div>
 
 </body>
 </html>

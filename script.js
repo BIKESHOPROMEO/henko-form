@@ -1,55 +1,110 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const selectedDate = params.get("date");
-  const selectedTime = params.get("time");
-  
-  const nameInput = document.querySelector('input[name="name"]');
-  const nameDisplay = document.getElementById("nameWithHonorific");
+const loadingOverlay = document.getElementById("loadingOverlay");
+loadingOverlay.style.display = "block"; // ← fetch前に表示
+  document.getElementById("closeDialogBtn").addEventListener("click", () => {
+      document.getElementById("closeDialog").style.display = "none";
+  });
 
-  if (nameInput && nameDisplay) {
-    nameInput.addEventListener("input", () => {
-      const rawName = nameInput.value.trim();
-      nameDisplay.textContent = rawName ? `${rawName} 様` : "未入力";
+  const params = new URLSearchParams(window.location.search);  
+  let selectedDate = params.get("date");
+  let selectedTime = params.get("time");
+  const id = params.get("id");
+  let originalDate = params.get("originalDate");
+  let originalTime = params.get("originalTime");
+
+  // 日付表示整形
+function formatJapaneseDate(dateStr, rawTimeStr) {
+  let timeStr = rawTimeStr;
+
+  // もし timeStr が Date型っぽかったら、文字列に変換
+  if (typeof rawTimeStr === "string" && rawTimeStr.includes("T")) {
+    const timeObj = new Date(rawTimeStr);
+    timeStr = timeObj.getHours().toString().padStart(2, "0") + ":" + timeObj.getMinutes().toString().padStart(2, "0");
+  }
+
+  const date = new Date(dateStr);
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const weekday = weekdays[date.getDay()];
+  return `${month}/${day}（${weekday}） ${timeStr}`;
+}
+
+if (id) {
+  fetch(`/api/henko-form?id=${id}&action=getReservation`)
+    .then(res => res.json())
+    .then(data => {
+  if (data && data.id) {
+        selectedDate = selectedDate || data.date;
+        selectedTime = selectedTime || data.time;
+
+    // フォームに反映
+        document.querySelector('input[name="name"]').value = data.name || "";
+        document.querySelector('input[name="phone"]').value = data.phone || "";
+        document.querySelector('input[name="email"]').value = data.email || "";
+        document.querySelector('input[name="carModel"]').value = data.carModel || "";
+        document.querySelector('select[name="workType"]').value = data.workType || "";
+        document.querySelector('textarea[name="note"]').value = data.note || "";
+
+        // hiddenフィールド（IDは常にセット）
+        document.querySelector('input[name="id"]').value = id || "";
+
+        let originalDisplayText = "";
+          if (!originalDate && data.date) originalDate = data.date;
+          if (!originalTime && data.time) originalTime = data.time;
+
+          if (originalDate && originalTime) {
+            originalDisplayText = formatJapaneseDate(originalDate, originalTime);
+          }
+                  
+        document.getElementById("originalDateTime").textContent = originalDisplayText;      
+
+        if (selectedDate && selectedTime) {
+          const newDisplayText = formatJapaneseDate(selectedDate, selectedTime);
+          document.getElementById("selectedDateTime").textContent = newDisplayText;
+          document.getElementById("selectedDateTime").style.color = "#007BFF";
+          document.querySelector('input[name="date"]').value = selectedDate;
+          document.querySelector('input[name="time"]').value = selectedTime;
+        } else {
+          document.getElementById("selectedDateTime").textContent = originalDisplayText;
+          document.getElementById("selectedDateTime").style.color = "#007BFF";
+          document.querySelector('input[name="date"]').value = data.date || "";
+          document.querySelector('input[name="time"]').value = data.time || "";
+        }
+      } else {
+        alert("予約情報の取得に失敗しました");
+      }
+    })
+    .catch(err => {
+      console.error("予約情報取得エラー:", err);
+      alert("予約情報の取得に失敗しました");
+    })
+    .finally(() => {
+      loadingOverlay.style.display = "none";
     });
-  }
-
-    // 電話番号 → 数字以外を弾く
-  const phoneInput = document.querySelector('input[name="phone"]');
-  if (phoneInput) {
-    phoneInput.addEventListener("input", () => {
-      phoneInput.value = phoneInput.value.replace(/[^\d]/g, "");
-    });
-  }
-
-  // 日付を「8/22（金）」形式に変換する関数
-  function formatJapaneseDate(dateStr, timeStr) {
-    const date = new Date(`${dateStr}T${timeStr}`);
-    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const weekday = weekdays[date.getDay()];
-    return `${month}/${day}（${weekday}） ${timeStr}`;
-  }
-
-  // 表示用テキスト更新
-  const displayText = (selectedDate && selectedTime)
-  ? formatJapaneseDate(selectedDate, selectedTime)
-  : "未選択";
-
-  const displayEl = document.getElementById("selectedDateTime");
-   displayEl.textContent = displayText;
-   displayEl.style.color = "#007BFF";  // Bootstrap風の青色
-
-  // hiddenフィールドに値をセット
-  const dateInput = document.querySelector('input[name="date"]');
-  const timeInput = document.querySelector('input[name="time"]');
-  if (dateInput && timeInput && selectedDate && selectedTime) {
-    dateInput.value = selectedDate;
-    timeInput.value = selectedTime;
+}
+  // 日時変更ボタンの動作
+  document.getElementById("changeDateBtn").addEventListener("click", () => {
+  if (id) {
+    const url = new URL("https://henko-calendar.vercel.app/");
+    url.searchParams.set("id", id); // ← 予約ID
+    url.searchParams.set("originalDate", selectedDate); // ← 元の予約日
+    url.searchParams.set("originalTime", selectedTime); // ← 元の予約時間
+    window.location.href = url.toString();
+  } else {
+    alert("予約IDが取得できませんでした。");
   }
 });
 
-document.getElementById("submitBtn").addEventListener("click", async function () {
+	document.getElementById("cancelBtn").addEventListener("click", async function () {
+  if (!id) {
+    alert("予約IDが取得できませんでした。");
+    return;
+  }
+
+  const confirmCancel = confirm("本当に予約をキャンセルしますか？");
+  if (!confirmCancel) return;
+
   this.disabled = true;
   document.getElementById("sendingDialog").style.display = "block";
 
@@ -58,53 +113,71 @@ document.getElementById("submitBtn").addEventListener("click", async function ()
   const data = {};
 
   for (const [key, value] of formData.entries()) {
-    data[key] = value.trim();
+    data[key] = value;
   }
 
-  data.action = "new";
-
-  const params = new URLSearchParams(window.location.search);
-  data.date = data.date || params.get("date");
-  data.time = data.time || params.get("time");
-  data.selectedDateTime = `${data.date || ""} ${data.time || ""}`;
-
-  const requiredFields = ["date", "time", "name", "phone", "email", "carModel", "workType"];
-  const missingFields = requiredFields.filter(field => !data[field]);
-
-  if (missingFields.length > 0) {
-    const fieldLabels = {
-  date: "日付",
-  time: "時間",
-  name: "お客様名",
-  phone: "電話番号",
-  email: "メールアドレス",
-  carModel: "車種",
-  workType: "作業内容",
-};
-    alert("未入力の項目があります：\n" + missingFields.map(f => `・${fieldLabels[f]}`).join("\n"));
-    this.disabled = false;
-    document.getElementById("sendingDialog").style.display = "none";
-    return;
-  }
+  data.action = "cancel";
 
   try {
-    const response = await fetch("/api/yoyaku-form", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(data),
-});
+    const response = await fetch("/api/henko-form", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
     const result = await response.json();
-    console.log("fetch成功:", result);
-    alert(result.message || "予約が送信されました！");
-    document.getElementById("completeDialog").style.display = "block";
+    console.log("キャンセル成功:", result);
+    alert(result.message || "予約をキャンセルしました！");
+    window.location.href = "https://bikeshopromeo.github.io/reservation-cancelled"; // ← 任意の完了画面へ
+  } catch (err) {
+    console.error("キャンセルエラー:", err);
+    alert("キャンセル処理中にエラーが発生しました：" + err.message);
+    this.disabled = false;
+  } finally {
+    document.getElementById("sendingDialog").style.display = "none";
+  }
+});
+
+  // 送信処理
+  document.getElementById("submitBtn").addEventListener("click", async function () {
+    this.disabled = true;
+    document.getElementById("sendingDialog").style.display = "block";
+
+    const form = document.getElementById("reservationForm");
+    const formData = new FormData(form);
+    const data = {};
+
+    for (const [key, value] of formData.entries()) {
+      data[key] = value;
+    }
+
+    data.action = "update"; // ← 変更処理として識別
+    data.selectedDateTime = `${data.date || ""} ${data.time || ""}`;
+
+    try {
+      const response = await fetch("/api/henko-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      console.log("fetch成功:", result);
+      alert(result.message || "予約内容を変更しました！");
+      // ✅ 閉じる案内ダイアログを表示
+      document.getElementById("closeDialog").style.display = "block";      
+      this.textContent = "送信完了！"; // ← ボタンのラベル変更
+      this.classList.add("submitted"); // ← CSSで見た目変える用
     } catch (err) {
       console.error("fetchエラー:", err);
       alert("エラーが発生しました：" + err.message);
       this.disabled = false;
     } finally {
-      document.getElementById("sendingDialog").style.display = "none";
- }
-});
+  document.getElementById("sendingDialog").style.display = "none";
+}
+  });
+ });
