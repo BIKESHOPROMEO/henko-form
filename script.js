@@ -130,7 +130,7 @@ if (id) {
     const result = await response.json();
     console.log("キャンセル成功:", result);
     alert(result.message || "予約をキャンセルしました！");
-    window.location.href = "https://bikeshopromeo.github.io/reservation-cancelled"; // ← 任意の完了画面へ
+    window.location.href = "https://lin.ee/Z2vIdYk"; // ← 任意の完了画面へ
   } catch (err) {
     console.error("キャンセルエラー:", err);
     alert("キャンセル処理中にエラーが発生しました：" + err.message);
