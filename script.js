@@ -4,6 +4,7 @@ loadingOverlay.style.display = "block"; // ← fetch前に表示
   document.getElementById("closeDialogBtn").addEventListener("click", () => {
       document.getElementById("closeDialog").style.display = "none";
   });
+	
 
   const params = new URLSearchParams(window.location.search);  
   let selectedDate = params.get("date");
@@ -180,4 +181,5 @@ if (id) {
   document.getElementById("sendingDialog").style.display = "none";
 }
   });
+
  });
