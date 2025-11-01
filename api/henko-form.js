@@ -5,6 +5,7 @@ export default async function handler(req, res) {
   const { id } = req.query;
   const GAS_URL = `${GAS_BASE_URL}?id=${id}&action=getReservation`;
 
+    
   try {
     const response = await fetch(GAS_URL);
     const text = await response.text();
@@ -44,4 +45,5 @@ export default async function handler(req, res) {
     console.error("Vercel Functionsエラー:", err);
     return res.status(500).json({ message: "Vercel Functionsエラー", error: err.message });
   }
+
 }
