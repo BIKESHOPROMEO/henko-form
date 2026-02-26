@@ -168,7 +168,7 @@ if (id) {
       const result = await response.json();
       console.log("fetch成功:", result);
       alert(result.message || "予約内容を変更しました！");
-      window.location.href = "https://lin.ee/Z21vIdYk";
+      window.location.href = "https://lin.ee/Z2vIdYk";
       // ✅ 閉じる案内ダイアログを表示
       //document.getElementById("closeDialog").style.display = "block";      
       //this.textContent = "送信完了！"; // ← ボタンのラベル変更
@@ -181,4 +181,5 @@ if (id) {
   document.getElementById("sendingDialog").style.display = "none";
 }
   });
+
  });
