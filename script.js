@@ -4,7 +4,6 @@ loadingOverlay.style.display = "block"; // ← fetch前に表示
   document.getElementById("closeDialogBtn").addEventListener("click", () => {
       document.getElementById("closeDialog").style.display = "none";
   });
-	
 
   const params = new URLSearchParams(window.location.search);  
   let selectedDate = params.get("date");
@@ -169,10 +168,11 @@ if (id) {
       const result = await response.json();
       console.log("fetch成功:", result);
       alert(result.message || "予約内容を変更しました！");
+      window.location.href = "https://lin.ee/Z21vIdYk";
       // ✅ 閉じる案内ダイアログを表示
-      document.getElementById("closeDialog").style.display = "block";      
-      this.textContent = "送信完了！"; // ← ボタンのラベル変更
-      this.classList.add("submitted"); // ← CSSで見た目変える用
+      //document.getElementById("closeDialog").style.display = "block";      
+      //this.textContent = "送信完了！"; // ← ボタンのラベル変更
+      //this.classList.add("submitted"); // ← CSSで見た目変える用
     } catch (err) {
       console.error("fetchエラー:", err);
       alert("エラーが発生しました：" + err.message);
@@ -181,5 +181,4 @@ if (id) {
   document.getElementById("sendingDialog").style.display = "none";
 }
   });
-
  });
